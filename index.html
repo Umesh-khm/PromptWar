@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Campus Lost & Found</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mP8/5+hHgAHggJ/PchI7wAAAABJRU5ErkJggg==">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay hidden">
+        <div class="loading-spinner"></div>
+    </div>
+
+    <!-- Toast Notifications -->
+    <div id="toast-container" class="toast-container"></div>
+
+    <!-- Main Navigation -->
+    <nav class="main-nav">
+        <div class="container">
+            <h1 class="nav-title">Campus Lost & Found</h1>
+            <button id="menu-toggle" class="menu-toggle" aria-label="Toggle menu">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home View -->
+        <section id="home-view" class="view active">
+            <div class="container">
+                <!-- Search and Filters -->
+                <div class="filters-section">
+                    <div class="search-bar">
+                        <input type="text" id="search-input" class="form-control" placeholder="Search items...">
+                    </div>
+                    
+                    <div class="filters">
+                        <select id="category-filter" class="form-control">
+                            <option value="">All Categories</option>
+                            <option value="bag">Bag</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="id_card">ID Card</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="stationery">Stationery</option>
+                            <option value="others">Others</option>
+                        </select>
+                        
+                        <select id="status-filter" class="form-control">
+                            <option value="">All Status</option>
+                            <option value="lost">Lost</option>
+                            <option value="found">Found</option>
+                        </select>
+                        
+                        <select id="sort-filter" class="form-control">
+                            <option value="newest">Newest First</option>
+                            <option value="oldest">Oldest First</option>
+                        </select>
+                    </div>
+                    
+                    <div class="actions">
+                        <button id="view-toggle" class="btn btn--secondary" aria-label="Toggle view">Grid</button>
+                        <button id="report-btn" class="btn btn--primary">Report Item</button>
+                        <button id="admin-btn" class="btn btn--outline">Admin</button>
+                    </div>
+                </div>
+
+                <!-- Items Grid -->
+                <div id="items-container" class="items-container">
+                    <div id="items-grid" class="items-grid"></div>
+                    <div id="empty-state" class="empty-state hidden">
+                        <h3>No items found</h3>
+                        <p>Try adjusting your search or filters, or be the first to report an item!</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Report View -->
+        <section id="report-view" class="view">
+            <div class="container">
+                <div class="form-header">
+                    <button id="back-to-home" class="btn btn--outline">← Back</button>
+                    <h2>Report Lost or Found Item</h2>
+                </div>
+                
+                <form id="report-form" class="report-form">
+                    <div class="form-group">
+                        <label for="item-title" class="form-label">Title *</label>
+                        <input type="text" id="item-title" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-description" class="form-label">Description *</label>
+                        <textarea id="item-description" class="form-control" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-category" class="form-label">Category *</label>
+                        <select id="item-category" class="form-control" required>
+                            <option value="">Select a category</option>
+                            <option value="bag">Bag</option>
+                            <option value="electronics">Electronics</option>
+                            <option value="id_card">ID Card</option>
+                            <option value="clothing">Clothing</option>
+                            <option value="stationery">Stationery</option>
+                            <option value="others">Others</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label class="form-label">Status *</label>
+                        <div class="radio-group">
+                            <label class="radio-label">
+                                <input type="radio" name="item-status" value="lost" required>
+                                <span>Lost</span>
+                            </label>
+                            <label class="radio-label">
+                                <input type="radio" name="item-status" value="found" required>
+                                <span>Found</span>
+                            </label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-location" class="form-label">Last seen/Found location *</label>
+                        <input type="text" id="item-location" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-date" class="form-label">Date *</label>
+                        <input type="date" id="item-date" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reporter-name" class="form-label">Your Name *</label>
+                        <input type="text" id="reporter-name" class="form-control" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reporter-email" class="form-label">Email (optional)</label>
+                        <input type="email" id="reporter-email" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="reporter-phone" class="form-label">Phone (optional)</label>
+                        <input type="tel" id="reporter-phone" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="item-image" class="form-label">Photo (optional)</label>
+                        <input type="file" id="item-image" class="form-control" accept="image/*">
+                        <div id="image-preview" class="image-preview hidden">
+                            <img id="preview-img" alt="Preview">
+                            <button type="button" id="remove-image" class="btn btn--outline btn--sm">Remove</button>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn--primary btn--full-width">Submit Report</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- Details View -->
+        <section id="details-view" class="view">
+            <div class="container">
+                <div class="form-header">
+                    <button id="back-to-home-details" class="btn btn--outline">← Back</button>
+                    <button id="share-item" class="btn btn--secondary">Share</button>
+                </div>
+                
+                <div id="item-details" class="item-details">
+                    <!-- Details content will be populated by JavaScript -->
+                </div>
+                
+                <div id="chat-section" class="chat-section">
+                    <h3>Messages</h3>
+                    <div id="messages-list" class="messages-list"></div>
+                    
+                    <form id="message-form" class="message-form">
+                        <div class="form-group">
+                            <label for="sender-name" class="form-label">Your Name *</label>
+                            <input type="text" id="sender-name" class="form-control" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="sender-email" class="form-label">Email (optional)</label>
+                            <input type="email" id="sender-email" class="form-control">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="message-text" class="form-label">Message *</label>
+                            <textarea id="message-text" class="form-control" rows="3" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn--primary">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- Admin View -->
+        <section id="admin-view" class="view">
+            <div class="container">
+                <div class="form-header">
+                    <button id="back-to-home-admin" class="btn btn--outline">← Back</button>
+                    <h2>Admin Panel</h2>
+                </div>
+                
+                <div id="admin-login" class="admin-login">
+                    <div class="form-group">
+                        <label for="admin-passcode" class="form-label">Admin Passcode</label>
+                        <input type="password" id="admin-passcode" class="form-control" placeholder="Enter passcode">
+                    </div>
+                    <button id="admin-login-btn" class="btn btn--primary">Login</button>
+                </div>
+                
+                <div id="admin-panel" class="admin-panel hidden">
+                    <div class="admin-settings">
+                        <h3>Settings</h3>
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="require-approval">
+                            <span>Require admin approval before listing items</span>
+                        </label>
+                        
+                        <label class="checkbox-label">
+                            <input type="checkbox" id="email-enabled">
+                            <span>Enable email notifications</span>
+                        </label>
+                    </div>
+                    
+                    <div id="pending-items" class="admin-section">
+                        <h3>Pending Items</h3>
+                        <div id="pending-list" class="admin-items-list"></div>
+                    </div>
+                    
+                    <div id="approved-items" class="admin-section">
+                        <h3>All Items</h3>
+                        <div id="admin-items-list" class="admin-items-list"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal for confirmations -->
+    <div id="modal" class="modal hidden">
+        <div class="modal-content">
+            <h3 id="modal-title"></h3>
+            <p id="modal-message"></p>
+            <div class="modal-actions">
+                <button id="modal-cancel" class="btn btn--outline">Cancel</button>
+                <button id="modal-confirm" class="btn btn--primary">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
